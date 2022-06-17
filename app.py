@@ -6,10 +6,10 @@ import os
 
 app = Flask(__name__)
 
-app.config["MYSQL_USER"] = "root"
-app.config["MYSQL_PASSWORD"] = "root"
-app.config["MYSQL_DB"] = "crocosoft_test"
-app.config["MYSQL_HOST"] = "localhost"
+app.config["MYSQL_USER"] = os.getenv('MYSQL_USER','root')
+app.config["MYSQL_PASSWORD"] = os.getenv('MYSQL_PASSWORD','root')
+app.config["MYSQL_DB"] = os.getenv('MYSQL_DB','crocosoft_test')
+app.config["MYSQL_HOST"] =  os.getenv('MYSQL_HOST','localhost')
 
 mysql = MySQL(app)
 
@@ -57,6 +57,7 @@ def create_tables():
 #Get customer with ID
 @app.route("/get_customer/<int:pk>", methods=["GET"])
 def get_customer(pk):
+    print(os.getenv('MYSQL_USER'))
     try:
         cursor = mysql.connection.cursor()
         cursor.execute(f'''SELECT * FROM customer WHERE id = {pk}''')
@@ -69,7 +70,7 @@ def get_customer(pk):
             'error': f'Error: {e}',
         }) , 404
 
-# Create New Customer
+# Create Customer
 @app.route("/create_customer/",methods=['POST'])
 def create_customer():
     data = json.loads(request.data)
@@ -89,7 +90,26 @@ def create_customer():
         }) , 404
 
 
-#Delete customer with ID
+@app.route("/update_customer/<int:pk>", methods=["PUT"])
+def update_customer(pk):
+    data = json.loads(request.data)
+    try:
+        name = data['name']
+        phone = data['phone']
+        cursor = mysql.connection.cursor()
+        query = f'UPDATE customer SET name="{name}",phone="{phone}" WHERE id={pk}'
+        print(query)
+        cursor.execute(query)
+        mysql.connection.commit()
+        return jsonify({
+            'msg':f"Update User successfully"
+        }) , 200
+    except Exception as e:
+        return jsonify({
+            'error': f'Error: {e}',
+        }) , 400
+
+# Deleet Customer
 @app.route("/customer_delete/<int:pk>", methods=["DELETE"])
 def customer_delete(pk):
     try:
