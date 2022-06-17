@@ -59,10 +59,26 @@ def create_tables():
         #tables already created
         return True
 
+
+#Get customers
+@app.route("/get_customers", methods=["GET"])
+def get_customers():
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute(f'''SELECT * FROM customer''')
+        result = cursor.fetchall()
+        return jsonify({
+            'data': result,
+        }) , 200
+    except Exception as e:
+        return jsonify({
+            'error': f'Error: {e}',
+        }) , 404
+
+
 #Get customer with ID
 @app.route("/get_customer/<int:pk>", methods=["GET"])
 def get_customer(pk):
-    print(os.getenv('MYSQL_USER'))
     try:
         cursor = mysql.connection.cursor()
         cursor.execute(f'''SELECT * FROM customer WHERE id = {pk}''')
