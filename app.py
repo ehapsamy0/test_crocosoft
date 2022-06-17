@@ -31,7 +31,7 @@ def create_tables():
                 day_cost INT,
                 color VARCHAR(50),
                 time_create DATETIME DEFAULT CURRENT_TIMESTAMP,
-                time_update DATETIME DEFAULT CURRENT_TIMESTAMP,
+                time_update DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 FOREIGN KEY (type_id) REFERENCES type_vehicle(id),
                 PRIMARY KEY (id));
             CREATE TABLE customer(

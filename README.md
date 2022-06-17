@@ -14,4 +14,4 @@
 
 
 ### 1. Entity Relationship Diagram (ERD):
-![alt erd](https://github.com/ehapsamy0/test_crocosoft/blob/main/erd/Screenshot%20(8).png)
+![alt erd](https://github.com/ehapsamy0/test_crocosoft/blob/main/erd/erd.png)
