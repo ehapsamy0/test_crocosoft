@@ -68,3 +68,22 @@ def get_customer(pk):
         return jsonify({
             'error': f'Error: {e}',
         }) , 404
+
+
+@app.route("/create_customer/",methods=['POST'])
+def create_customer():
+    data = json.loads(request.data)
+    try:
+        name = data['name']
+        phone = data['phone']
+        cursor = mysql.connection.cursor()
+        query = f'INSERT INTO customer (name,phone) VALUES ("{name}","{phone}")'
+        cursor.execute(query)
+        mysql.connection.commit()
+        return jsonify({
+            'msg':"Customer created successfully"
+        }) , 201
+    except Exception as e:
+        return jsonify({
+            'error': f'Error: {e}',
+        }) , 404
