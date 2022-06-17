@@ -38,6 +38,11 @@ def create_tables():
                 id INT NOT NULL AUTO_INCREMENT,
                 name VARCHAR(100),
                 phone VARCHAR(20),
+                address VARCHAR(120),
+                national_id VARCHAR(50),
+                time_create DATETIME DEFAULT CURRENT_TIMESTAMP,
+                time_update DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
                 PRIMARY KEY (id));
             CREATE TABLE booking(
                 id INT NOT NULL AUTO_INCREMENT,
@@ -77,8 +82,10 @@ def create_customer():
     try:
         name = data['name']
         phone = data['phone']
+        address = data['address']
+        national_id = data['national_id']
         cursor = mysql.connection.cursor()
-        query = f'INSERT INTO customer (name,phone) VALUES ("{name}","{phone}");'
+        query = f'INSERT INTO customer (name,phone,address,national_id) VALUES ("{name}","{phone}","{address}","{national_id}");'
         cursor.execute(query)
         mysql.connection.commit()
         return jsonify({
