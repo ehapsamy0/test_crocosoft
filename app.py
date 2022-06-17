@@ -69,7 +69,7 @@ def get_customer(pk):
             'error': f'Error: {e}',
         }) , 404
 
-
+# Create New Customer
 @app.route("/create_customer/",methods=['POST'])
 def create_customer():
     data = json.loads(request.data)
@@ -77,7 +77,7 @@ def create_customer():
         name = data['name']
         phone = data['phone']
         cursor = mysql.connection.cursor()
-        query = f'INSERT INTO customer (name,phone) VALUES ("{name}","{phone}")'
+        query = f'INSERT INTO customer (name,phone) VALUES ("{name}","{phone}");'
         cursor.execute(query)
         mysql.connection.commit()
         return jsonify({
@@ -87,3 +87,20 @@ def create_customer():
         return jsonify({
             'error': f'Error: {e}',
         }) , 404
+
+
+#Delete customer with ID
+@app.route("/customer_delete/<int:pk>", methods=["DELETE"])
+def customer_delete(pk):
+    try:
+        cursor = mysql.connection.cursor()
+        query = f'DELETE FROM customer WHERE id = {pk};'
+        cursor.execute(query)
+        mysql.connection.commit()
+        return jsonify({
+            'msg':f"deleted successfully"
+        }) , 200
+    except Exception as e:
+        return jsonify({
+            'error': f'Error: {e}',
+        }) , 400
